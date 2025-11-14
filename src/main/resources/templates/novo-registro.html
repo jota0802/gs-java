@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Registro - Mental Health Platform</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar(activePage='registros')}"></div>
+    
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Novo Registro</h1>
+                <p class="page-subtitle">Cadastre um novo registro de acompanhamento</p>
+            </div>
+            <a th:href="@{/registros}" class="btn btn-secondary">Voltar</a>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/registros/novo}" method="post">
+                <h2 class="card-title mb-3">Dados do Registro</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pacienteId" class="form-label">Paciente *</label>
+                        <select id="pacienteId" name="pacienteId" class="form-select" required>
+                            <option value="">Selecione um paciente...</option>
+                            <option th:each="paciente : ${pacientes}" 
+                                    th:value="${paciente.id}" 
+                                    th:text="${paciente.nome}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataRegistro" class="form-label">Data do Registro *</label>
+                        <input type="date" id="dataRegistro" name="dataRegistro" class="form-input" required>
+                    </div>
+                </div>
+
+                <h3 class="card-title mt-3 mb-2" style="font-size: 1.1rem;">Indicadores</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nivelHumor" class="form-label">Nível de Humor *</label>
+                        <select id="nivelHumor" name="nivelHumor" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="1">1 - Muito Baixo</option>
+                            <option value="2">2 - Baixo</option>
+                            <option value="3">3 - Moderado</option>
+                            <option value="4">4 - Bom</option>
+                            <option value="5">5 - Muito Bom</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nivelAnsiedade" class="form-label">Nível de Ansiedade *</label>
+                        <select id="nivelAnsiedade" name="nivelAnsiedade" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="1">1 - Muito Baixo</option>
+                            <option value="2">2 - Baixo</option>
+                            <option value="3">3 - Moderado</option>
+                            <option value="4">4 - Alto</option>
+                            <option value="5">5 - Muito Alto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="horasSono" class="form-label">Horas de Sono *</label>
+                        <input type="number" id="horasSono" name="horasSono" class="form-input" min="0" max="24" step="0.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qualidadeDia" class="form-label">Qualidade do Dia *</label>
+                        <select id="qualidadeDia" name="qualidadeDia" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="RUIM">Ruim</option>
+                            <option value="REGULAR">Regular</option>
+                            <option value="BOM">Bom</option>
+                            <option value="MUITO_BOM">Muito Bom</option>
+                            <option value="EXCELENTE">Excelente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="praticouExercicio" class="form-label">Praticou Exercício? *</label>
+                    <select id="praticouExercicio" name="praticouExercicio" class="form-select" required>
+                        <option value="">Selecione...</option>
+                        <option value="true">Sim</option>
+                        <option value="false">Não</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="anotacoes" class="form-label">Anotações</label>
+                    <textarea id="anotacoes" name="anotacoes" class="form-textarea" rows="4" placeholder="Observações sobre o dia..."></textarea>
+                </div>
+
+                <div class="flex-between mt-3">
+                    <a th:href="@{/registros}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Salvar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

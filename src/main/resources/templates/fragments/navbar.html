@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="navbar" class="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/}" class="navbar-brand">
+                Mental Health Platform
+            </a>
+            <ul class="navbar-menu">
+                <li><a th:href="@{/}" class="navbar-link" th:classappend="${activePage == 'dashboard'} ? 'active'">Dashboard</a></li>
+                <li><a th:href="@{/profissionais}" class="navbar-link" th:classappend="${activePage == 'profissionais'} ? 'active'">Profissionais</a></li>
+                <li><a th:href="@{/pacientes}" class="navbar-link" th:classappend="${activePage == 'pacientes'} ? 'active'">Pacientes</a></li>
+                <li><a th:href="@{/registros}" class="navbar-link" th:classappend="${activePage == 'registros'} ? 'active'">Registros</a></li>
+                <li><a th:href="@{/consultas}" class="navbar-link" th:classappend="${activePage == 'consultas'} ? 'active'">Consultas</a></li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Profissionais de Saúde - Mental Health Platform')}"></head>
+<body>
+    <!-- Navegação -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Profissionais de Saúde</h1>
+                <p class="page-subtitle">Gerenciamento de profissionais cadastrados na plataforma</p>
+            </div>
+            <a th:href="@{/profissionais/novo}" class="btn btn-primary">Novo Profissional</a>
+        </div>
+
+        <!-- Card de Listagem -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Lista de Profissionais</h2>
+                <span class="badge badge-info" th:text="'Total: ' + ${profissionais.size()}">Total: 0</span>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Especialidade</th>
+                            <th>CRM/CRP</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${profissionais.isEmpty()}">
+                            <td colspan="8" class="text-center">Nenhum profissional encontrado</td>
+                        </tr>
+                        <tr th:each="prof : ${profissionais}">
+                            <td th:text="${prof.nome}"></td>
+                            <td>
+                                <span class="badge badge-primary" 
+                                      th:text="${prof.tipoProfissional.name() == 'PSICOLOGO' ? 'Psicólogo' :
+                                                prof.tipoProfissional.name() == 'PSIQUIATRA' ? 'Psiquiatra' :
+                                                prof.tipoProfissional.name() == 'TERAPEUTA' ? 'Terapeuta' :
+                                                prof.tipoProfissional.name() == 'COACH' ? 'Coach' :
+                                                prof.tipoProfissional.name() == 'ASSISTENTE_SOCIAL' ? 'Assistente Social' : 'Outro'}">
+                                </span>
+                            </td>
+                            <td th:text="${prof.especialidade}"></td>
+                            <td th:text="${prof.crp}"></td>
+                            <td th:text="${prof.email}"></td>
+                            <td th:text="${prof.telefone ?: '-'}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${prof.ativo ? 'badge-success' : 'badge-danger'}"
+                                      th:text="${prof.ativo ? 'Ativo' : 'Inativo'}">
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/profissionais/editar/{id}(id=${prof.id})}" 
+                                       class="btn btn-sm btn-secondary" title="Editar profissional">Editar</a>
+                                    <a th:href="@{/profissionais/excluir/{id}(id=${prof.id})}" 
+                                       class="btn btn-sm btn-danger" title="Excluir profissional">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

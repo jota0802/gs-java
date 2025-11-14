@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Consulta - Mental Health Platform</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar(activePage='consultas')}"></div>
+    
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Editar Consulta</h1>
+                <p class="page-subtitle">Atualize os dados da consulta</p>
+            </div>
+            <a th:href="@{/consultas}" class="btn btn-secondary">Voltar</a>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/consultas/editar/{id}(id=${consulta.id})}" method="post" th:object="${consulta}">
+                <h2 class="card-title mb-3">Dados da Consulta</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pacienteId" class="form-label">Paciente *</label>
+                        <select id="pacienteId" name="pacienteId" class="form-select" required>
+                            <option value="">Selecione um paciente...</option>
+                            <option th:each="paciente : ${pacientes}" 
+                                    th:value="${paciente.id}" 
+                                    th:text="${paciente.nome}"
+                                    th:selected="${consulta.pacienteId == paciente.id}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profissionalId" class="form-label">Profissional *</label>
+                        <select id="profissionalId" name="profissionalId" class="form-select" required>
+                            <option value="">Selecione um profissional...</option>
+                            <option th:each="prof : ${profissionais}" 
+                                    th:value="${prof.id}" 
+                                    th:text="${prof.nome + ' - ' + prof.especialidade}"
+                                    th:selected="${consulta.profissionalId == prof.id}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataHoraConsulta" class="form-label">Data e Hora *</label>
+                        <input type="datetime-local" id="dataHoraConsulta" name="dataHoraConsulta" class="form-input" 
+                               th:value="${#temporals.format(consulta.dataHoraConsulta, 'yyyy-MM-dd\'T\'HH:mm')}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="localConsulta" class="form-label">Local *</label>
+                        <input type="text" id="localConsulta" name="localConsulta" class="form-input" th:value="${consulta.localConsulta}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="consultaOnline" class="form-label">Tipo de Consulta *</label>
+                        <select id="consultaOnline" name="consultaOnline" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="false" th:selected="${!consulta.consultaOnline}">Presencial</option>
+                            <option value="true" th:selected="${consulta.consultaOnline}">Online</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status" class="form-label">Status *</label>
+                        <select id="status" name="status" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="AGENDADA" th:selected="${consulta.status == 'AGENDADA'}">Agendada</option>
+                            <option value="CONFIRMADA" th:selected="${consulta.status == 'CONFIRMADA'}">Confirmada</option>
+                            <option value="EM_ANDAMENTO" th:selected="${consulta.status == 'EM_ANDAMENTO'}">Em Andamento</option>
+                            <option value="CONCLUIDA" th:selected="${consulta.status == 'CONCLUIDA'}">Concluída</option>
+                            <option value="CANCELADA" th:selected="${consulta.status == 'CANCELADA'}">Cancelada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivoConsulta" class="form-label">Motivo da Consulta</label>
+                    <textarea id="motivoConsulta" name="motivoConsulta" class="form-textarea" rows="4" th:text="${consulta.motivoConsulta}"></textarea>
+                </div>
+
+                <div class="flex-between mt-3">
+                    <a th:href="@{/consultas}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

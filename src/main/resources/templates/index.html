@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Mental Health Platform - Dashboard')}"></head>
+<body>
+    <!-- Navegação -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Visão geral da plataforma de bem-estar e saúde mental</p>
+        </div>
+
+        <!-- Alertas -->
+        <div id="alert-container"></div>
+
+        <!-- Cards de Estatísticas -->
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total de Pacientes</div>
+                <div class="stat-value" th:text="${totalPacientes}">-</div>
+                <div class="stat-description">Pacientes cadastrados</div>
+            </div>
+
+            <div class="stat-card success">
+                <div class="stat-label">Profissionais Ativos</div>
+                <div class="stat-value" th:text="${totalProfissionais}">-</div>
+                <div class="stat-description">Profissionais disponíveis</div>
+            </div>
+
+            <div class="stat-card warning">
+                <div class="stat-label">Consultas Agendadas</div>
+                <div class="stat-value" th:text="${totalConsultas}">-</div>
+                <div class="stat-description">Consultas pendentes</div>
+            </div>
+
+            <div class="stat-card info">
+                <div class="stat-label">Registros Hoje</div>
+                <div class="stat-value" th:text="${totalRegistros}">-</div>
+                <div class="stat-description">Registros diários</div>
+            </div>
+        </div>
+
+        <!-- Atalhos Rápidos -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Ações Rápidas</h2>
+            </div>
+            <div class="flex gap-2" style="flex-wrap: wrap;">
+                <a th:href="@{/pacientes/novo}" class="btn btn-primary">
+                    Novo Paciente
+                </a>
+                <a th:href="@{/profissionais/novo}" class="btn btn-primary">
+                    Novo Profissional
+                </a>
+                <a th:href="@{/consultas/nova}" class="btn btn-primary">
+                    Agendar Consulta
+                </a>
+                <a th:href="@{/registros/novo}" class="btn btn-primary">
+                    Novo Registro
+                </a>
+            </div>
+        </div>
+
+        <!-- Consultas Recentes -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Consultas Recentes</h2>
+                <a th:href="@{/consultas}" class="btn btn-sm btn-secondary">Ver todas</a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Paciente</th>
+                            <th>Profissional</th>
+                            <th>Status</th>
+                            <th>Local</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${ultimasConsultas.isEmpty()}">
+                            <td colspan="5" class="text-center">Nenhuma consulta encontrada</td>
+                        </tr>
+                        <tr th:each="consulta : ${ultimasConsultas}">
+                            <td th:text="${#temporals.format(consulta.dataHoraConsulta, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${consulta.pacienteNome}"></td>
+                            <td th:text="${consulta.profissionalNome}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${consulta.status.name() == 'AGENDADA' ? 'badge-info' : 
+                                                       consulta.status.name() == 'CONFIRMADA' ? 'badge-success' :
+                                                       consulta.status.name() == 'CONCLUIDA' ? 'badge-success' :
+                                                       consulta.status.name() == 'CANCELADA' ? 'badge-danger' : 'badge-warning'}"
+                                      th:text="${consulta.status.name() == 'AGENDADA' ? 'Agendada' :
+                                                consulta.status.name() == 'CONFIRMADA' ? 'Confirmada' :
+                                                consulta.status.name() == 'EM_ANDAMENTO' ? 'Em Andamento' :
+                                                consulta.status.name() == 'CONCLUIDA' ? 'Concluída' :
+                                                consulta.status.name() == 'CANCELADA' ? 'Cancelada' : 'Reagendada'}">
+                                </span>
+                            </td>
+                            <td th:text="${consulta.localConsulta ?: 'Não informado'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pacientes Ativos -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Pacientes Recentes</h2>
+                <a th:href="@{/pacientes}" class="btn btn-sm btn-secondary">Ver todos</a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Data de Nascimento</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${ultimosPacientes.isEmpty()}">
+                            <td colspan="5" class="text-center">Nenhum paciente encontrado</td>
+                        </tr>
+                        <tr th:each="paciente : ${ultimosPacientes}">
+                            <td th:text="${paciente.nome}"></td>
+                            <td th:text="${paciente.email}"></td>
+                            <td th:text="${paciente.telefone ?: '-'}"></td>
+                            <td th:text="${#temporals.format(paciente.dataNascimento, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${paciente.ativo ? 'badge-success' : 'badge-danger'}"
+                                      th:text="${paciente.ativo ? 'Ativo' : 'Inativo'}">
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

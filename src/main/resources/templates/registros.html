@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Registros Diários - Mental Health Platform')}"></head>
+<body>
+    <!-- Navegação -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Registros Diários</h1>
+                <p class="page-subtitle">Acompanhamento do bem-estar dos pacientes</p>
+            </div>
+            <a th:href="@{/registros/novo}" class="btn btn-primary">Novo Registro</a>
+        </div>
+
+        <!-- Card de Listagem -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Lista de Registros</h2>
+                <span class="badge badge-info" th:text="'Total: ' + ${registros.size()}">Total: 0</span>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Paciente</th>
+                            <th>Humor</th>
+                            <th>Ansiedade</th>
+                            <th>Horas de Sono</th>
+                            <th>Qualidade do Dia</th>
+                            <th>Exercício</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${registros.isEmpty()}">
+                            <td colspan="8" class="text-center">Nenhum registro encontrado</td>
+                        </tr>
+                        <tr th:each="registro : ${registros}">
+                            <td th:text="${#temporals.format(registro.dataRegistro, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${registro.pacienteNome}"></td>
+                            <td>
+                                <span class="badge"
+                                      th:classappend="${registro.nivelHumor.name() == 'MUITO_BOM' ? 'badge-success' :
+                                                       registro.nivelHumor.name() == 'BOM' ? 'badge-success' :
+                                                       registro.nivelHumor.name() == 'NEUTRO' ? 'badge-warning' :
+                                                       registro.nivelHumor.name() == 'RUIM' ? 'badge-danger' : 'badge-danger'}"
+                                      th:text="${registro.nivelHumor.name() == 'MUITO_BOM' ? 'Muito Bom' :
+                                                registro.nivelHumor.name() == 'BOM' ? 'Bom' :
+                                                registro.nivelHumor.name() == 'NEUTRO' ? 'Neutro' :
+                                                registro.nivelHumor.name() == 'RUIM' ? 'Ruim' : 'Muito Ruim'}">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-warning"
+                                      th:text="${registro.nivelAnsiedade.name() == 'MUITO_BAIXO' ? 'Muito Baixo' :
+                                                registro.nivelAnsiedade.name() == 'BAIXO' ? 'Baixo' :
+                                                registro.nivelAnsiedade.name() == 'MODERADO' ? 'Moderado' :
+                                                registro.nivelAnsiedade.name() == 'ALTO' ? 'Alto' : 'Muito Alto'}">
+                                </span>
+                            </td>
+                            <td th:text="${registro.horasSono != null ? registro.horasSono + 'h' : '-'}"></td>
+                            <td th:text="${registro.qualidadeDia != null ? registro.qualidadeDia + '/10' : '-'}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${registro.praticouExercicio ? 'badge-success' : 'badge-secondary'}"
+                                      th:text="${registro.praticouExercicio ? 'Sim' : 'Não'}">
+                                </span>
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/registros/editar/{id}(id=${registro.id})}" 
+                                       class="btn btn-sm btn-secondary" title="Editar registro">Editar</a>
+                                    <a th:href="@{/registros/excluir/{id}(id=${registro.id})}" 
+                                       class="btn btn-sm btn-danger" title="Excluir registro">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

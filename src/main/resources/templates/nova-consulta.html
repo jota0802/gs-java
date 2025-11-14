@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Consulta - Mental Health Platform</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar(activePage='consultas')}"></div>
+    
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Agendar Consulta</h1>
+                <p class="page-subtitle">Cadastre uma nova consulta no sistema</p>
+            </div>
+            <a th:href="@{/consultas}" class="btn btn-secondary">Voltar</a>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/consultas/nova}" method="post">
+                <h2 class="card-title mb-3">Dados da Consulta</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pacienteId" class="form-label">Paciente *</label>
+                        <select id="pacienteId" name="pacienteId" class="form-select" required>
+                            <option value="">Selecione um paciente...</option>
+                            <option th:each="paciente : ${pacientes}" 
+                                    th:value="${paciente.id}" 
+                                    th:text="${paciente.nome}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profissionalId" class="form-label">Profissional *</label>
+                        <select id="profissionalId" name="profissionalId" class="form-select" required>
+                            <option value="">Selecione um profissional...</option>
+                            <option th:each="prof : ${profissionais}" 
+                                    th:value="${prof.id}" 
+                                    th:text="${prof.nome + ' - ' + prof.especialidade}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataHoraConsulta" class="form-label">Data e Hora *</label>
+                        <input type="datetime-local" id="dataHoraConsulta" name="dataHoraConsulta" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="localConsulta" class="form-label">Local *</label>
+                        <input type="text" id="localConsulta" name="localConsulta" class="form-input" placeholder="Ex: Consultório 3" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="consultaOnline" class="form-label">Tipo de Consulta *</label>
+                    <select id="consultaOnline" name="consultaOnline" class="form-select" required>
+                        <option value="">Selecione...</option>
+                        <option value="false">Presencial</option>
+                        <option value="true">Online</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivoConsulta" class="form-label">Motivo da Consulta</label>
+                    <textarea id="motivoConsulta" name="motivoConsulta" class="form-textarea" rows="4" placeholder="Descreva o motivo da consulta..."></textarea>
+                </div>
+
+                <div class="flex-between mt-3">
+                    <a th:href="@{/consultas}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Agendar Consulta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

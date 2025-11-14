@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Consultas - Mental Health Platform')}"></head>
+<body>
+    <!-- Navegação -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Consultas</h1>
+                <p class="page-subtitle">Gerenciamento de consultas e sessões terapêuticas</p>
+            </div>
+            <a th:href="@{/consultas/nova}" class="btn btn-primary">Agendar Consulta</a>
+        </div>
+
+        <!-- Card de Listagem -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Lista de Consultas</h2>
+                <span class="badge badge-info" th:text="'Total: ' + ${consultas.size()}">Total: 0</span>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Paciente</th>
+                            <th>Profissional</th>
+                            <th>Status</th>
+                            <th>Local</th>
+                            <th>Online</th>
+                            <th>Duração</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${consultas.isEmpty()}">
+                            <td colspan="8" class="text-center">Nenhuma consulta encontrada</td>
+                        </tr>
+                        <tr th:each="consulta : ${consultas}">
+                            <td th:text="${#temporals.format(consulta.dataHoraConsulta, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${consulta.pacienteNome}"></td>
+                            <td th:text="${consulta.profissionalNome}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${consulta.status.name() == 'AGENDADA' ? 'badge-info' : 
+                                                       consulta.status.name() == 'CONFIRMADA' ? 'badge-success' :
+                                                       consulta.status.name() == 'CONCLUIDA' ? 'badge-success' :
+                                                       consulta.status.name() == 'CANCELADA' ? 'badge-danger' : 'badge-warning'}"
+                                      th:text="${consulta.status.name() == 'AGENDADA' ? 'Agendada' :
+                                                consulta.status.name() == 'CONFIRMADA' ? 'Confirmada' :
+                                                consulta.status.name() == 'EM_ANDAMENTO' ? 'Em Andamento' :
+                                                consulta.status.name() == 'CONCLUIDA' ? 'Concluída' :
+                                                consulta.status.name() == 'CANCELADA' ? 'Cancelada' : 'Reagendada'}">
+                                </span>
+                            </td>
+                            <td th:text="${consulta.localConsulta ?: '-'}"></td>
+                            <td>
+                                <span class="badge" 
+                                      th:classappend="${consulta.consultaOnline ? 'badge-info' : 'badge-secondary'}"
+                                      th:text="${consulta.consultaOnline ? 'Sim' : 'Não'}">
+                                </span>
+                            </td>
+                            <td th:text="${consulta.duracaoMinutos != null ? consulta.duracaoMinutos + ' min' : '-'}"></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/consultas/editar/{id}(id=${consulta.id})}" 
+                                       class="btn btn-sm btn-secondary" title="Editar consulta">Editar</a>
+                                    <a th:href="@{/consultas/excluir/{id}(id=${consulta.id})}" 
+                                       class="btn btn-sm btn-danger" title="Excluir consulta">Excluir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Exclusão - Mental Health Platform</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Confirmar Exclusão</h1>
+                <p class="page-subtitle">Esta ação não pode ser desfeita</p>
+            </div>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; padding: var(--spacing-lg);">
+                <div style="font-size: 3rem; color: var(--danger-color); margin-bottom: var(--spacing-md);">⚠️</div>
+                
+                <h2 class="card-title mb-2">Tem certeza que deseja excluir?</h2>
+                
+                <div class="alert alert-warning" style="margin: var(--spacing-lg) 0; text-align: left;">
+                    <strong>Você está prestes a excluir:</strong><br>
+                    <span th:text="${tipo}" style="text-transform: capitalize;"></span>: 
+                    <strong th:text="${nome}"></strong>
+                </div>
+
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                    Esta ação removerá permanentemente este registro do sistema.<br>
+                    <strong>Esta operação não pode ser desfeita.</strong>
+                </p>
+
+                <form th:action="@{${'/'+tipo+'s/excluir/'+entidade.id}}" method="post" style="display: inline;">
+                    <div class="flex gap-2" style="justify-content: center; flex-wrap: wrap;">
+                        <a th:href="@{${urlVoltar}}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
