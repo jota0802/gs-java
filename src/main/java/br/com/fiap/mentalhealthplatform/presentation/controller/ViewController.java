@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Controller para servir páginas HTML usando Thymeleaf
@@ -134,8 +135,9 @@ public class ViewController {
      * Processar criação de novo paciente
      */
     @PostMapping("/pacientes/novo")
-    public String criarPaciente(@ModelAttribute PacienteRequestDTO dto) {
+    public String criarPaciente(@ModelAttribute PacienteRequestDTO dto, RedirectAttributes redirectAttributes) {
         pacienteService.create(dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Paciente cadastrado com sucesso!");
         return "redirect:/pacientes";
     }
 
@@ -152,8 +154,9 @@ public class ViewController {
      * Processar criação de novo profissional
      */
     @PostMapping("/profissionais/novo")
-    public String criarProfissional(@ModelAttribute ProfissionalSaudeRequestDTO dto) {
+    public String criarProfissional(@ModelAttribute ProfissionalSaudeRequestDTO dto, RedirectAttributes redirectAttributes) {
         profissionalSaudeService.create(dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Profissional de saúde cadastrado com sucesso!");
         return "redirect:/profissionais";
     }
 
@@ -174,8 +177,9 @@ public class ViewController {
      * Processar criação de nova consulta
      */
     @PostMapping("/consultas/nova")
-    public String criarConsulta(@ModelAttribute ConsultaRequestDTO dto) {
+    public String criarConsulta(@ModelAttribute ConsultaRequestDTO dto, RedirectAttributes redirectAttributes) {
         consultaService.create(dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Consulta agendada com sucesso!");
         return "redirect:/consultas";
     }
 
@@ -194,8 +198,9 @@ public class ViewController {
      * Processar criação de novo registro
      */
     @PostMapping("/registros/novo")
-    public String criarRegistro(@ModelAttribute RegistroDiarioRequestDTO dto) {
+    public String criarRegistro(@ModelAttribute RegistroDiarioRequestDTO dto, RedirectAttributes redirectAttributes) {
         registroDiarioService.create(dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Registro diário cadastrado com sucesso!");
         return "redirect:/registros";
     }
 
@@ -216,8 +221,9 @@ public class ViewController {
      * Processar edição de paciente
      */
     @PostMapping("/pacientes/editar/{id}")
-    public String editarPaciente(@PathVariable Long id, @ModelAttribute PacienteRequestDTO dto) {
+    public String editarPaciente(@PathVariable Long id, @ModelAttribute PacienteRequestDTO dto, RedirectAttributes redirectAttributes) {
         pacienteService.update(id, dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Paciente atualizado com sucesso!");
         return "redirect:/pacientes";
     }
 
@@ -236,8 +242,9 @@ public class ViewController {
      * Processar edição de profissional
      */
     @PostMapping("/profissionais/editar/{id}")
-    public String editarProfissional(@PathVariable Long id, @ModelAttribute ProfissionalSaudeRequestDTO dto) {
+    public String editarProfissional(@PathVariable Long id, @ModelAttribute ProfissionalSaudeRequestDTO dto, RedirectAttributes redirectAttributes) {
         profissionalSaudeService.update(id, dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Profissional de saúde atualizado com sucesso!");
         return "redirect:/profissionais";
     }
 
@@ -260,8 +267,9 @@ public class ViewController {
      * Processar edição de consulta
      */
     @PostMapping("/consultas/editar/{id}")
-    public String editarConsulta(@PathVariable Long id, @ModelAttribute ConsultaRequestDTO dto) {
+    public String editarConsulta(@PathVariable Long id, @ModelAttribute ConsultaRequestDTO dto, RedirectAttributes redirectAttributes) {
         consultaService.update(id, dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Consulta atualizada com sucesso!");
         return "redirect:/consultas";
     }
 
@@ -282,8 +290,9 @@ public class ViewController {
      * Processar edição de registro
      */
     @PostMapping("/registros/editar/{id}")
-    public String editarRegistro(@PathVariable Long id, @ModelAttribute RegistroDiarioRequestDTO dto) {
+    public String editarRegistro(@PathVariable Long id, @ModelAttribute RegistroDiarioRequestDTO dto, RedirectAttributes redirectAttributes) {
         registroDiarioService.update(id, dto);
+        redirectAttributes.addFlashAttribute("successMessage", "Registro diário atualizado com sucesso!");
         return "redirect:/registros";
     }
 
@@ -307,8 +316,9 @@ public class ViewController {
      * Processar exclusão de paciente
      */
     @PostMapping("/pacientes/excluir/{id}")
-    public String excluirPaciente(@PathVariable Long id) {
+    public String excluirPaciente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         pacienteService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Paciente excluído com sucesso!");
         return "redirect:/pacientes";
     }
 
@@ -330,8 +340,9 @@ public class ViewController {
      * Processar exclusão de profissional
      */
     @PostMapping("/profissionais/excluir/{id}")
-    public String excluirProfissional(@PathVariable Long id) {
+    public String excluirProfissional(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         profissionalSaudeService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Profissional de saúde excluído com sucesso!");
         return "redirect:/profissionais";
     }
 
@@ -353,8 +364,9 @@ public class ViewController {
      * Processar exclusão de consulta
      */
     @PostMapping("/consultas/excluir/{id}")
-    public String excluirConsulta(@PathVariable Long id) {
+    public String excluirConsulta(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         consultaService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Consulta excluída com sucesso!");
         return "redirect:/consultas";
     }
 
@@ -376,8 +388,9 @@ public class ViewController {
      * Processar exclusão de registro
      */
     @PostMapping("/registros/excluir/{id}")
-    public String excluirRegistro(@PathVariable Long id) {
+    public String excluirRegistro(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         registroDiarioService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Registro diário excluído com sucesso!");
         return "redirect:/registros";
     }
 }

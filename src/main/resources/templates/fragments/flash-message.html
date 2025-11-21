@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragment de mensagem flash -->
+    <div th:fragment="flash">
+        <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <div class="alert alert-warning" th:if="${warningMessage}" th:text="${warningMessage}"></div>
+        <div class="alert alert-info" th:if="${infoMessage}" th:text="${infoMessage}"></div>
+    </div>
+</body>
+</html>

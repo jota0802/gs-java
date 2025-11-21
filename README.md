@@ -36,12 +36,12 @@ A plataforma permite o gerenciamento completo de pacientes, profissionais de sa�
 - [x] Design minimalista com cor primária #87dff9 (cyan)
 - [x] Design responsivo com CSS moderno
 - [x] **Server-side rendering** com Spring MVC + Thymeleaf
-- [x] Fragments Thymeleaf reutilizáveis (navbar, head)
+- [x] Fragments Thymeleaf reutilizáveis (navbar, head, flash-message)
 - [x] Formatação de dados com Thymeleaf (datas, enums, badges)
 - [x] Formulários de criação (CREATE) para todas as 4 entidades
-- [ ] Formulários de edição (UPDATE) - **EM DESENVOLVIMENTO**
-- [ ] Confirmação e exclusão (DELETE) - **EM DESENVOLVIMENTO**
-- [ ] Sistema de mensagens flash (feedback ao usuário) - **PENDENTE**
+- [x] Formulários de edição (UPDATE) para todas as 4 entidades
+- [x] Confirmação e exclusão (DELETE) para todas as 4 entidades
+- [x] Sistema de mensagens flash (feedback ao usuário)
 
 ---
 
@@ -145,8 +145,6 @@ src/main/resources/
 - **Java 17+** (JDK)
 - Maven 3.8+
 
-> ⚠️ **Importante**: Se encontrar o erro `No compiler is provided in this environment`, consulte o arquivo `SOLUCAO_JDK.md` para instruções detalhadas sobre como configurar o JDK corretamente.
-
 ### Passos
 
 1. **Clone o repositório**
@@ -190,9 +188,17 @@ Ao acessar `http://localhost:8080`, você terá acesso às seguintes páginas re
 - **Nova Consulta** (`/consultas/nova`): Agendamento de consulta com dropdowns dinâmicos
 - **Novo Registro** (`/registros/novo`): Registro diário de bem-estar
 
-#### 🚧 Em Desenvolvimento
-- **Editar** (`/{entidade}/editar/{id}`): Formulários de edição - **PENDENTE**
-- **Excluir** (`/{entidade}/excluir/{id}`): Confirmação de exclusão - **PENDENTE**
+#### Formulários de Edição (UPDATE)
+- **Editar Paciente** (`/pacientes/editar/{id}`): Formulário pré-preenchido de edição
+- **Editar Profissional** (`/profissionais/editar/{id}`): Edição de dados do profissional
+- **Editar Consulta** (`/consultas/editar/{id}`): Atualização de dados da consulta
+- **Editar Registro** (`/registros/editar/{id}`): Edição do registro diário
+
+#### Exclusão (DELETE)
+- **Excluir Paciente** (`/pacientes/excluir/{id}`): Confirmação e exclusão
+- **Excluir Profissional** (`/profissionais/excluir/{id}`): Confirmação e exclusão
+- **Excluir Consulta** (`/consultas/excluir/{id}`): Confirmação e exclusão
+- **Excluir Registro** (`/registros/excluir/{id}`): Confirmação e exclusão
 
 Cada página possui:
 - ✅ **Server-side rendering** com Thymeleaf
@@ -204,7 +210,8 @@ Cada página possui:
 - ✅ Design responsivo para mobile
 - ✅ Reutilização de componentes via fragments
 - ✅ Formulários de criação funcionais
-- ⏳ CRUD completo (faltam UPDATE e DELETE)
+- ✅ **CRUD completo** (CREATE, READ, UPDATE, DELETE)
+- ✅ **Sistema de mensagens flash** para feedback ao usuário
 
 ### Executar com MySQL (Opcional)
 
@@ -411,10 +418,10 @@ A aplicação carrega automaticamente dados de exemplo:
 ### Testar com cURL
 
 ```bash
-# Listar todos os pacientes
+# Listar todos os pacientes via API REST
 curl -X GET http://localhost:8080/api/pacientes
 
-# Buscar paciente por ID
+# Buscar paciente por ID via API REST
 curl -X GET http://localhost:8080/api/pacientes/1
 
 # Criar novo paciente
@@ -522,13 +529,14 @@ br.com.fiap.mentalhealthplatform
 ### Frontend (BÔNUS - Server-Side Rendering)
 - ✅ **Interface web completa** com Thymeleaf + Spring MVC
 - ✅ **Dashboard interativo** com estatísticas em tempo real
-- ✅ **Operações CREATE e READ** implementadas para todas as 4 entidades
-- ⏳ **Operações UPDATE e DELETE** em desenvolvimento (ver TAREFAS_PENDENTES.md)
+- ✅ **CRUD completo** (CREATE, READ, UPDATE, DELETE) para todas as 4 entidades
+- ✅ **Sistema de mensagens flash** com feedback visual para todas as operações
 - ✅ **Design System minimalista** com cor primária cyan (#87dff9)
 - ✅ **Responsive Design** compatível com mobile, tablet e desktop
 - ✅ **Server-Side Rendering** com Thymeleaf (eliminados ~450 linhas de JavaScript)
 - ✅ **Validações no frontend**: HTML5 + Bean Validation no backend
-- ✅ **Formulários de criação** para todas as entidades com dropdowns dinâmicos
+- ✅ **Formulários completos**: Criação e edição com dropdowns dinâmicos
+- ✅ **Confirmação de exclusão**: Página dedicada com aviso de ação irreversível
 - ✅ **Integração nativa** com Spring MVC e Services
 
 ---
@@ -544,28 +552,26 @@ br.com.fiap.mentalhealthplatform
 - **Linhas de Código**: ~3.500 LOC
 
 ### Frontend (Thymeleaf)
-- **Páginas HTML**: 9 (Dashboard + 4 Listagens + 4 Formulários de Criação)
+- **Páginas HTML**: 13 (Dashboard + 4 Listagens + 4 Formulários de Criação + 4 Formulários de Edição + 1 Confirmação de Exclusão)
 - **Arquivo CSS**: 1 Design System completo (~670 linhas)
 - **Templates Thymeleaf**: Server-side rendering
-- **Componentes UI**: Cards, Tabelas, Forms, Badges, Alerts, Navbar, Fragments
+- **Componentes UI**: Cards, Tabelas, Forms, Badges, Alerts, Navbar, Fragments, Flash Messages
 - **JavaScript**: Eliminado (~450 linhas removidas na migração para SSR)
-- **Total**: ~1.800 LOC frontend
-- **Pendente**: 8 páginas adicionais (4 edição + 4 exclusão) - ver TAREFAS_PENDENTES.md
+- **Total**: ~2.400 LOC frontend
+- **CRUD**: 100% completo (CREATE, READ, UPDATE, DELETE)
 
 ### Total Geral
-- **~5.300 linhas de código** (backend + frontend)
-- **50 arquivos** de código-fonte
-- **Cobertura**: 60% das funcionalidades completas (CREATE e READ), 40% em desenvolvimento (UPDATE e DELETE)
+- **~5.900 linhas de código** (backend + frontend)
+- **54 arquivos** de código-fonte
+- **Cobertura**: 100% das funcionalidades CRUD implementadas
 
 ---
 
 ## 👥 Equipe
 
-- Nome do Aluno 1 - RM XXXXX
-- Nome do Aluno 2 - RM XXXXX
-- Nome do Aluno 3 - RM XXXXX
-
-> ⚠️ **Atenção**: Atualize os nomes e RMs dos integrantes do grupo antes da entrega!
+- Estevam Melo - RM: 555124
+- João Victor Franco - RM: 556790
+- Nathan Craveiro - RM: 555508
 
 ---
 
@@ -577,4 +583,4 @@ Este projeto foi desenvolvido para fins acadêmicos como parte da Global Solutio
 
 ## 📞 Suporte
 
-Para dúvidas ou problemas, entre em contato através dos issues do repositório.
+Para dúvidas ou problemas, entre em contato através do teams com algum dos integrantes.
